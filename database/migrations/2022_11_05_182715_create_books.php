@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('editorial_id');
             $table->string('title');
             $table->date('published_at');
-            $table->decimal('price', [8, 2]);
+            $table->decimal('price');
             $table->softDeletes();
             $table->timestamps();
 
