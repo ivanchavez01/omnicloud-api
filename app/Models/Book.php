@@ -4,28 +4,28 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Book extends Model
 {
     use HasFactory;
 
     /**
-     * @return HasOne
+     * @return BelongsTo
      */
-    public function editorial(): HasOne
+    public function editorial(): BelongsTo
     {
-        return $this->hasOne(Editorial::class);
+        return $this->belongsTo(Editorial::class);
     }
 
-    public function pdfFile(): HasOne
+    public function pdfFile(): BelongsTo
     {
-        return $this->hasOne(File::class);
+        return $this->belongsTo(File::class);
     }
 
     public function authors(): BelongsToMany
     {
-        return $this->belongsToMany(Author::class);
+        return $this->belongsToMany(Author::class, 'books_authors');
     }
 }

@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('books', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('editorial_id');
+            $table->unsignedBigInteger('pdf_file_id');
             $table->string('title');
             $table->date('published_at');
             $table->decimal('price');
@@ -24,6 +25,10 @@ return new class extends Migration
 
             $table->foreign('editorial_id')
                 ->on('editorials')
+                ->references('id');
+
+            $table->foreign('pdf_file_id')
+                ->on('files')
                 ->references('id');
         });
     }

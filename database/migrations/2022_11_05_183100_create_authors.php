@@ -15,11 +15,16 @@ return new class extends Migration
     {
         Schema::create('authors', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('picture_id');
             $table->string('name', 100);
             $table->string('last_name', 100);
             $table->string('email', 160);
             $table->softDeletes();
             $table->timestamps();
+
+            $table->foreign('picture_id')
+                ->on('files')
+                ->references('id');
         });
     }
 
