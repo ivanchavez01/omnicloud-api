@@ -26,7 +26,7 @@ jobs:
       - name: Create Database
         run: |
           mkdir -p database
-          touch /var/www/html/database/database.sqlite
+          touch database/database.sqlite
       - name: Migrations
         run: php artisan migrate
       - name: Seeders
@@ -35,5 +35,5 @@ jobs:
         env:
           APP_ENV: local
           DB_CONNECTION: sqlite
-          DB_DATABASE: /var/www/html/database/database.sqlite
+          DB_DATABASE: database/database.sqlite
         run: vendor/bin/phpunit tests
