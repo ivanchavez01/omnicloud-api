@@ -24,11 +24,10 @@ class UpdateBookRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'editorial_id' => 'required',
-            'pdf_file' => 'file',
+            'editorial_id' => 'numeric',
             'title' => 'string',
             'publish_at' => 'date',
-            'price' => 'required',
+            'price' => 'numeric',
         ];
     }
 }
