@@ -32,7 +32,25 @@ class AuthorTest extends TestCase
         $this->assertInstanceOf(File::class, $author->picture);
     }
 
-    public function testAnUserCanCreateABookViaApi(): void
+    public function testAnUserCanRetrieveSomeAuthorsViaApi(): void
+    {
+        $response = $this->withHeaders([
+            'Authorization' => 'Basic '. base64_encode("{$this->email}:{$this->password}")
+        ])->get('/api/author');
+
+        $response->assertOk();
+    }
+
+    public function testAnUserCanRetrieveOneAuthorViaApi(): void
+    {
+        $response = $this->withHeaders([
+            'Authorization' => 'Basic '. base64_encode("{$this->email}:{$this->password}")
+        ])->get('/api/author/2');
+
+        $response->assertOk();
+    }
+
+    public function testAnUserCanCreateAnAuthorViaApi(): void
     {
         Storage::fake('authors');
 
@@ -49,22 +67,20 @@ class AuthorTest extends TestCase
         $response->assertOk();
     }
 
-    public function testAnUserCanUpdateABookViaApi(): void
+    public function testAnUserCanUpdateAnAuthorViaApi(): void
     {
         $response = $this->withHeaders([
             'Authorization' => 'Basic '. base64_encode("{$this->email}:{$this->password}")
         ])->put('/api/author/2', [
-            'editorial_id' => 1,
-            'authors' => [1],
-            'title' => 'Fundamentals of Software Architecture 2',
-            'published_at' => '2022-01-19',
-            'price' => 1200,
+            'name' => 'Mark2',
+            'last_name' => 'Richards2',
+            'email' => 'mrichards2@oreilly.com',
         ]);
 
         $response->assertOk();
     }
 
-    public function testAnUserCanDeleteABookViaApi(): void
+    public function testAnUserCanDeleteAnAuthorViaApi(): void
     {
         $response = $this->withHeaders([
             'Authorization' => 'Basic '. base64_encode("{$this->email}:{$this->password}")
