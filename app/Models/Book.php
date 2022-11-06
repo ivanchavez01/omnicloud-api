@@ -11,6 +11,14 @@ class Book extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'editorial_id',
+        'pdf_file_id',
+        'title',
+        'published_at',
+        'price'
+    ];
+
     /**
      * @return BelongsTo
      */
