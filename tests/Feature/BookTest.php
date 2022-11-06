@@ -13,6 +13,17 @@ use Tests\TestCase;
 
 class BookTest extends TestCase
 {
+    private string $email;
+    private string $password;
+
+    protected function setUp(): void
+    {
+        $this->email = 'ichavez9001@gmail.com';
+        $this->password = '123456789';
+
+        parent::setUp();
+    }
+
     /**
      * A basic feature test example.
      *
@@ -27,16 +38,31 @@ class BookTest extends TestCase
         $this->assertInstanceOf(File::class, $book->pdfFile);
         $this->assertCount(1, $book->authors->toArray());
     }
+    public function testAnUserCanRetrieveSomeBooksViaApi(): void
+    {
+        $response = $this->withHeaders([
+            'Authorization' => 'Basic '. base64_encode("{$this->email}:{$this->password}")
+        ])->get('/api/book');
+
+        $response->assertOk();
+    }
+
+    public function testAnUserCanRetrieveOneBookViaApi(): void
+    {
+        $response = $this->withHeaders([
+            'Authorization' => 'Basic '. base64_encode("{$this->email}:{$this->password}")
+        ])->get('/api/book/1');
+
+        $response->assertOk();
+    }
 
     public function testAnUserCanCreateABookViaApi(): void
     {
-        $email = 'ichavez9001@gmail.com';
-        $password = '123456789';
-        Storage::fake('avatars');
+        Storage::fake('books');
 
         $file = UploadedFile::fake()->image('cover.jpg');
         $response = $this->withHeaders([
-            'Authorization' => 'Basic '. base64_encode("{$email}:{$password}")
+            'Authorization' => 'Basic '. base64_encode("{$this->email}:{$this->password}")
         ])->post('/api/book', [
             'editorial_id' => 1,
             'authors' => [1],
@@ -51,11 +77,8 @@ class BookTest extends TestCase
 
     public function testAnUserCanUpdateABookViaApi(): void
     {
-        $email = 'ichavez9001@gmail.com';
-        $password = '123456789';
-
         $response = $this->withHeaders([
-            'Authorization' => 'Basic '. base64_encode("{$email}:{$password}")
+            'Authorization' => 'Basic '. base64_encode("{$this->email}:{$this->password}")
         ])->put('/api/book/2', [
             'editorial_id' => 1,
             'authors' => [1],
@@ -69,11 +92,8 @@ class BookTest extends TestCase
 
     public function testAnUserCanDeleteABookViaApi(): void
     {
-        $email = 'ichavez9001@gmail.com';
-        $password = '123456789';
-
         $response = $this->withHeaders([
-            'Authorization' => 'Basic '. base64_encode("{$email}:{$password}")
+            'Authorization' => 'Basic '. base64_encode("{$this->email}:{$this->password}")
         ])->delete('/api/book/2');
 
         $response->assertOk();
