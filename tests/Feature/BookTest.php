@@ -48,4 +48,34 @@ class BookTest extends TestCase
 
         $response->assertOk();
     }
+
+    public function testAnUserCanUpdateABookViaApi(): void
+    {
+        $email = 'ichavez9001@gmail.com';
+        $password = '123456789';
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Basic '. base64_encode("{$email}:{$password}")
+        ])->put('/api/book/2', [
+            'editorial_id' => 1,
+            'authors' => [1],
+            'title' => 'Fundamentals of Software Architecture 2',
+            'published_at' => '2022-01-19',
+            'price' => 1200,
+        ]);
+
+        $response->assertOk();
+    }
+
+    public function testAnUserCanDeleteABookViaApi(): void
+    {
+        $email = 'ichavez9001@gmail.com';
+        $password = '123456789';
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Basic '. base64_encode("{$email}:{$password}")
+        ])->delete('/api/book/2');
+
+        $response->assertOk();
+    }
 }
