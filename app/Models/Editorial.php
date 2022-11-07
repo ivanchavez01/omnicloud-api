@@ -10,4 +10,9 @@ class Editorial extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    protected $fillable = [
+        'name',
+        'phone_number'
+    ];
 }
