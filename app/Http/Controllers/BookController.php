@@ -8,7 +8,6 @@ use App\Models\Book;
 use App\Models\File;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
-use SebastianBergmann\Diff\Exception;
 
 class BookController extends Controller
 {
@@ -19,7 +18,10 @@ class BookController extends Controller
      */
     public function index(): JsonResponse
     {
-        return response()->json(Book::all());
+        $books = Book::with(["authors.picture", "editorial", "pdfFile"])
+            ->get();
+
+        return response()->json($books);
     }
 
     /**
@@ -35,7 +37,7 @@ class BookController extends Controller
 
         try {
             $filePath = $request->file("pdf_file")
-                ->store('books');
+                ->store('public/books');
 
             $file = File::create([
                 "file" => $filePath
@@ -68,7 +70,9 @@ class BookController extends Controller
      */
     public function show(int $id): JsonResponse
     {
-        $book = Book::find($id);
+        $book = Book::with(["authors.picture", "editorial", "pdfFile"])
+            ->find($id);
+
         if ($book === null) {
             return response()->json(["error" => "Book not found"], 404);
         }

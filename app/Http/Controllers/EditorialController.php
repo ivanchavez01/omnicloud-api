@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateEditorialRequest;
 use App\Http\Requests\UpdateEditorialRequest;
+use App\Models\Book;
 use App\Models\Editorial;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 
 class EditorialController extends Controller
 {
@@ -16,7 +18,16 @@ class EditorialController extends Controller
      */
     public function index(): JsonResponse
     {
-        return response()->json(Editorial::all());
+        return response()->json(
+            Editorial::with("books")
+                ->get()
+                ->map(function (Editorial $editorial) {
+                    return array_merge(
+                        $editorial->toArray(),
+                        [ 'books' => $editorial->books?->count() ]
+                    );
+                })
+        );
     }
 
     /**
