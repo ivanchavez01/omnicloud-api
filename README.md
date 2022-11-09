@@ -24,3 +24,22 @@ Construcción de contenedores.
 ### Manipular el contenedor
 
 `docker-compose exec omnicloud-api /bin/bash`
+
+## Instalación Backend
+
+### Instalación de la base de datos
+
+`php artisan migrate`
+
+### Instalación de datos
+
+`php artisan db:seed`
+
+## Correr pruebas de integración
+
+`php artisan test`
+
+## Registro de libros
+
+`php artisan db:seed --class=MoreBooksSeeder`
+
