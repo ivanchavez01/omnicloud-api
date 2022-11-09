@@ -27,6 +27,10 @@ Construcción de contenedores.
 
 ## Instalación Backend
 
+### Archivo de variables de entorno
+
+`cp .env.example .env`
+
 ### Instalación de la base de datos
 
 `php artisan migrate`
