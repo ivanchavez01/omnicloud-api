@@ -22,7 +22,11 @@ class AuthorController extends Controller
      */
     public function index(): JsonResponse
     {
-        return response()->json(Author::all());
+        return response()->json(
+            Author::with("picture")
+                ->whereNull('deleted_at')
+                ->get()
+        );
     }
 
     /**
@@ -37,7 +41,8 @@ class AuthorController extends Controller
         DB::beginTransaction();
 
         try {
-            $filePath = $request->file('photo')->store('authors');
+            $filePath = $request->file('photo')
+                ->store('public/authors');
             $photo = File::create([
                 "file" => $filePath
             ]);
@@ -64,7 +69,7 @@ class AuthorController extends Controller
      */
     public function show(int $id): JsonResponse
     {
-        $author = Author::find($id);
+        $author = Author::with("picture")->find($id);
         if ($author === null) {
             response()->json([
                 "error" => "Author not found"
@@ -85,7 +90,7 @@ class AuthorController extends Controller
     {
         $author = Author::find($id);
         if ($author === null) {
-            response()->json([
+            return response()->json([
                 "error" => "Author not found"
             ], 404);
         }
@@ -105,7 +110,7 @@ class AuthorController extends Controller
     {
         $author = Author::find($id);
         if ($author === null) {
-            response()->json([
+            return response()->json([
                 "error" => "Author not found"
             ], 404);
         }
